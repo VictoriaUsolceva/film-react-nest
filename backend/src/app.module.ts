@@ -5,6 +5,7 @@ import * as path from 'node:path';
 
 import { configProvider } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { FilmsModule } from './films/films.module';
       cache: true,
     }),
     FilmsModule,
+    OrderModule,
     // @todo: Добавьте раздачу статических файлов из public
   ],
   controllers: [],
