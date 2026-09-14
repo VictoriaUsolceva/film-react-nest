@@ -1,1 +1,14 @@
-//TODO описать DTO для запросов к /films
+import { ScheduleDTO } from 'src/schedule/dto/schedule.dto';
+
+export class FilmDto {
+  id: string;
+  rating: number;
+  director: string;
+  tags: string[];
+  title: string;
+  about: string;
+  description: string;
+  image: string;
+  cover: string;
+  schedule: ScheduleDTO[];
+}
