@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { configProvider } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { OrderModule } from './order/order.module';
     }),
     FilmsModule,
     OrderModule,
+    DatabaseModule,
   ],
   controllers: [],
   providers: [configProvider],
