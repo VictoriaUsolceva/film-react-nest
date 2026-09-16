@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import mongoose, { Schema } from 'mongoose';
 import { FilmDto, GetFilmDto } from 'src/films/dto/films.dto';
@@ -137,7 +136,7 @@ export class FilmsMongoDbRepository implements FilmsRepository {
 
       currentShedule.taken?.forEach((taken) => {
         if (taken === `${row}:${seat}`) {
-          throw new BadRequestException({ error: 'quis minim' });
+          throw new Error('quis minim');
         }
       });
 
