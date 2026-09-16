@@ -6,12 +6,12 @@ export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Get()
-  findAll() {
-    return this.filmsService.findAll();
+  async findAll() {
+    return await this.filmsService.findAll();
   }
 
-  @Get(':id/shedule')
-  findOne(@Param('id') id: string) {
-    return this.filmsService.findOne(id);
+  @Get(':id/schedule')
+  async findOne(@Param('id') id: string) {
+    return await this.filmsService.findOne(id);
   }
 }
