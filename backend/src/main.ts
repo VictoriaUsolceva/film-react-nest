@@ -3,8 +3,11 @@ import { AppModule } from './app.module';
 import 'dotenv/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
+import debug from 'debug';
 
 const IMAGE_FOLDER_PATH = process.env.IMAGE_FOLDER_PATH ?? '/content/afisha';
+
+export const appDebug = debug('app');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
