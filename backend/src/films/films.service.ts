@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { FilmsMongoDbRepository } from 'src/repository/films.repository';
 
 @Injectable()
 export class FilmsService {
-  findAll() {
-    return `This action returns all films`;
+  constructor(private readonly filmsRepository: FilmsMongoDbRepository) {}
+  async findAll() {
+    return await this.filmsRepository.findAll();
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} film`;
+    return this.filmsRepository.findOne(id);
   }
 }
