@@ -3,14 +3,15 @@ import {
   BadRequestException,
   Catch,
   ExceptionFilter,
-  HttpException,
 } from '@nestjs/common';
-
-@Catch(HttpException)
+@Catch(BadRequestException)
 export class BadRequestExceptionFilter implements ExceptionFilter {
   catch(exception: BadRequestException, host: ArgumentsHost) {
     const status = exception.getStatus();
-    const message = exception.message;
+    let message = exception.getResponse()['message'];
+    if (!message) {
+      message = exception.message;
+    }
 
     const response = host.switchToHttp().getResponse();
 

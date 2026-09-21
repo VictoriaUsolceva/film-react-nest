@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import debug from 'debug';
 import { AppConfig, CONFIG } from './app.config.provider';
+import { ValidationPipe } from '@nestjs/common';
 export const appDebug = debug('app');
 
 async function bootstrap() {
@@ -13,6 +14,7 @@ async function bootstrap() {
   const { imageFolder: IMAGE_FOLDER_PATH, port: PORT } = config.settings;
 
   app.setGlobalPrefix('api/afisha', { exclude: [IMAGE_FOLDER_PATH] });
+  app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(
     path.join(__dirname, '..', '/public', IMAGE_FOLDER_PATH),
     {
