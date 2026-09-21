@@ -1,3 +1,4 @@
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import mongoose, { Schema } from 'mongoose';
 import { FilmDto, GetFilmDto } from 'src/films/dto/films.dto';
@@ -132,11 +133,14 @@ export class FilmsMongoDbRepository implements FilmsRepository {
       const { film: id, daytime, price, row, seat, session } = ticket;
 
       const film = await Film.findOne({ id: id });
+      if (film === null) {
+        throw new NotFoundException('Film not Found');
+      }
       const currentShedule = film.findScheduleById(session);
 
       currentShedule.taken?.forEach((taken) => {
         if (taken === `${row}:${seat}`) {
-          throw new Error('quis minim');
+          throw new BadRequestException('quis minim');
         }
       });
 

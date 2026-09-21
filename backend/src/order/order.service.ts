@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateOrderDto } from './dto/order.dto';
 import { FilmsMongoDbRepository } from 'src/repository/films.repository';
 
@@ -10,7 +14,10 @@ export class OrderService {
       const anwser = await this.filmsRepository.createOrder(order);
       return anwser;
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      if (error instanceof BadRequestException) {
         throw new BadRequestException(error.message);
       }
     }
