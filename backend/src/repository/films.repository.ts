@@ -137,6 +137,9 @@ export class FilmsMongoDbRepository implements FilmsRepository {
         throw new NotFoundException('Film not Found');
       }
       const currentShedule = film.findScheduleById(session);
+      if (currentShedule === undefined) {
+        throw new NotFoundException('Film not Found');
+      }
 
       currentShedule.taken?.forEach((taken) => {
         if (taken === `${row}:${seat}`) {
