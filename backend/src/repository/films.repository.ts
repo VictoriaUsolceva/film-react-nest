@@ -118,6 +118,9 @@ export class FilmsMongoDbRepository implements FilmsRepository {
 
   async findOne(id: string) {
     const film = await Film.findOne({ id: id });
+    if (film === null) {
+      throw new NotFoundException('Film not Found');
+    }
     const { schedule } = film;
 
     return {
