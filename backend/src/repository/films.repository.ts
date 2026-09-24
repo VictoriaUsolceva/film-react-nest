@@ -26,7 +26,7 @@ const ScheduleSchema = new Schema<IScheduleSchema>(
 
 interface IFilmSchema extends FilmDto {
   findScheduleById(scheduleId: string): GetScheduleDTO | undefined;
-  pushTaken(scheduleId: string, taken: string): Promise<FilmDto>;
+  pushTakens(scheduleId: string, takens: string[]): Promise<FilmDto>;
 }
 
 const FilmSchema = new Schema<IFilmSchema>(
@@ -48,9 +48,9 @@ const FilmSchema = new Schema<IFilmSchema>(
       findScheduleById(scheduleId: string): GetScheduleDTO | undefined {
         return this.schedule.find(({ id }) => id === scheduleId);
       },
-      pushTaken(scheduleId: string, taken: string): Promise<FilmDto> {
+      pushTakens(scheduleId: string, takens: string[]): Promise<FilmDto> {
         const schedule = this.findScheduleById(scheduleId);
-        schedule.taken.push(taken);
+        schedule.taken.push(...takens);
         return this.save();
       },
     },
@@ -131,9 +131,15 @@ export class FilmsMongoDbRepository implements FilmsRepository {
 
   async createOrder({ tickets }: CreateOrderDto) {
     const response: ListResponse<OrderDto> = { total: 0, items: [] };
+    let filmsTakens: {
+      scheduleId: string;
+      film: IFilmSchema;
+      takens: string[];
+    }[] = [];
 
     for (const ticket of tickets) {
       const { film: id, daytime, price, row, seat, session } = ticket;
+      const taken = `${row}:${seat}`;
 
       const film = await Film.findOne({ id: id });
       if (film === null) {
@@ -144,13 +150,32 @@ export class FilmsMongoDbRepository implements FilmsRepository {
         throw new NotFoundException('Film not Found');
       }
 
-      currentShedule.taken?.forEach((taken) => {
-        if (taken === `${row}:${seat}`) {
-          throw new BadRequestException('quis minim');
-        }
-      });
+      if (currentShedule.taken.includes(taken)) {
+        throw new BadRequestException('Место уже занято');
+      }
 
-      await film.pushTaken(session, `${row}:${seat}`);
+      if (row > currentShedule.rows || seat > currentShedule.seats) {
+        throw new BadRequestException('Не существует такого места');
+      }
+
+      const currentFilmTakens = filmsTakens.find(
+        (el) => el.scheduleId === session,
+      );
+      if (!currentFilmTakens) {
+        filmsTakens = [
+          ...filmsTakens,
+          {
+            scheduleId: session,
+            film,
+            takens: [taken],
+          },
+        ];
+      } else {
+        if (currentFilmTakens.takens.includes(taken)) {
+          throw new BadRequestException('Место повторяется в заказе');
+        }
+        currentFilmTakens.takens.push(taken);
+      }
 
       response.items.push({
         daytime,
@@ -163,6 +188,10 @@ export class FilmsMongoDbRepository implements FilmsRepository {
       });
       response.total++;
     }
+
+    filmsTakens.forEach(async ({ scheduleId, film, takens }) => {
+      await film.pushTakens(scheduleId, takens);
+    });
 
     return response;
   }
