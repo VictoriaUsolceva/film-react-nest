@@ -9,6 +9,7 @@ import {
   IsNumber,
   ArrayNotEmpty,
   IsUUID,
+  IsArray,
 } from 'class-validator';
 
 class Ticket {
@@ -39,8 +40,9 @@ export class CreateOrderDto {
   email: string;
   @IsString()
   phone: string;
+  @IsArray()
   @ArrayNotEmpty()
-  @ValidateNested()
+  @ValidateNested({ each: true })
   @Type(() => Ticket)
   tickets: Ticket[];
 }
