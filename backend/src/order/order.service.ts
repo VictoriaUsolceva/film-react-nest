@@ -20,6 +20,7 @@ export class OrderService {
       if (error instanceof BadRequestException) {
         throw new BadRequestException(error.message);
       }
+      throw error;
     }
   }
 }

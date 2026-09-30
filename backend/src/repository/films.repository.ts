@@ -189,9 +189,9 @@ export class FilmsMongoDbRepository implements FilmsRepository {
       response.total++;
     }
 
-    filmsTakens.forEach(async ({ scheduleId, film, takens }) => {
+    for (const { scheduleId, film, takens } of filmsTakens) {
       await film.pushTakens(scheduleId, takens);
-    });
+    }
 
     return response;
   }
