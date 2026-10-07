@@ -28,7 +28,7 @@ export class Schedules {
         return value.join();
       },
       from(value: string): string[] {
-        return value.split(',');
+        return !value ? [] : value.split(',');
       },
     },
   })
