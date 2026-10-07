@@ -8,6 +8,8 @@ import { CreateOrderDto, OrderDto } from 'src/order/dto/order.dto';
 import { GetScheduleDTO } from 'src/schedule/dto/schedule.dto';
 import { DataSource, Repository } from 'typeorm';
 
+export const REPOSITORY_TOKEN = 'REPOSITORY_TOKEN';
+
 interface IScheduleSchema extends GetScheduleDTO {
   pushTaken(taken: string): Promise<GetScheduleDTO>;
 }
@@ -69,7 +71,7 @@ type ListResponse<Type> = {
   items: Type[];
 };
 
-interface FilmsRepository {
+export interface FilmsRepository {
   findAll: () => Promise<ListResponse<GetFilmDto>>;
   findOne: (id: string) => Promise<ListResponse<GetScheduleDTO>>;
   createOrder: (order: CreateOrderDto) => Promise<ListResponse<OrderDto>>;
