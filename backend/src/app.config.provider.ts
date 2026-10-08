@@ -16,7 +16,6 @@ export const AppConfigProvider = {
         ),
         password: configService.get<string>('DATABASE_PASSWORD', 'student'),
         username: configService.get<string>('DATABASE_USERNAME', 'student'),
-        dbname: configService.get<string>('DATABASE_NAME', 'student'),
       },
       settings: {
         imageFolder: configService.get<string>(
@@ -48,7 +47,6 @@ export interface AppConfigDatabase {
   url: string;
   username: string;
   password: string;
-  dbname: string;
 }
 
 export interface AppConfigSettings {

@@ -6,7 +6,7 @@
 
 Установите PostgreSQL скачав дистрибутив с официального сайта.
 
-- Создайте базу данных `prac`. 
+- Создайте базу данных `films`. 
 - Создайте пользователя `student` с паролем `student`. 
 - Выполните sql код в файле `backend/test/prac.init.sql` для создания таблиц. 
 - Заполните данными с помощью скриптов `backend/test/prac.films.sql` и `backend/test.prac.shedules.sql`.
