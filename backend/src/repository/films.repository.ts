@@ -39,7 +39,9 @@ export class FilmsTypeOrmRepository implements FilmsRepository {
   }
 
   async findAll(): Promise<ListResponse<GetFilmDto>> {
-    const films = await this.filmsRepository.find();
+    const films = await this.filmsRepository.find({
+      relations: { schedule: true },
+    });
 
     return { total: films.length, items: films };
   }
