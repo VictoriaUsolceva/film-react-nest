@@ -35,7 +35,7 @@ export class FilmsTypeOrmRepository implements FilmsRepository {
     if (film === null) {
       throw new NotFoundException('Film not Found');
     }
-    return { total: 1, items: film.schedule };
+    return { total: film.schedule.length, items: film.schedule };
   }
 
   async findAll(): Promise<ListResponse<GetFilmDto>> {
