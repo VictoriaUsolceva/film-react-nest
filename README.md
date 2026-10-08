@@ -19,12 +19,14 @@
 
 Установите зависимости помощью команды
 
-`yarn install --frozen-lockfile`
+`npm ci`
 
 Создайте `.env` файл из примера `.env.example`, в нём укажите:
 
-- `DATABASE_DRIVER` - тип драйвера СУБД - в нашем случае это `postgres`
+- `DATABASE_DRIVER` - тип драйвера СУБД - в нашем случае это `postgres`.
 - `DATABASE_URL` - адрес СУБД, например `postgres://localhost:5432/films`.
+- `DATABASE_USERNAME` - имя пользователя.
+- `DATABASE_PASSWORD` - пароль пользователя.
 
 Запустите бэкенд:
 
