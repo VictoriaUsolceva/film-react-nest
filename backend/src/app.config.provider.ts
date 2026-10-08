@@ -10,10 +10,9 @@ export const AppConfigProvider = {
     return {
       database: {
         driver: configService.get<Driver>('DATABASE_DRIVER', 'postgres'),
-        url: configService.get<string>(
-          'DATABASE_URL',
-          'postgres://localhost:5432/films',
-        ),
+        dbname: configService.get<string>('DATABASE_NAME', 'films'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
+        host: configService.get<string>('DATABASE_HOST', 'localhost'),
         password: configService.get<string>('DATABASE_PASSWORD', 'student'),
         username: configService.get<string>('DATABASE_USERNAME', 'student'),
       },
@@ -44,7 +43,9 @@ type Driver = 'postgres';
 
 export interface AppConfigDatabase {
   driver: Driver;
-  url: string;
+  dbname: string;
+  port: number;
+  host: string;
   username: string;
   password: string;
 }

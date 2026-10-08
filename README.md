@@ -24,7 +24,9 @@
 Создайте `.env` файл из примера `.env.example`, в нём укажите:
 
 - `DATABASE_DRIVER` - тип драйвера СУБД - в нашем случае это `postgres`.
-- `DATABASE_URL` - адрес СУБД, например `postgres://localhost:5432/films`.
+- `DATABASE_NAME` - название базы данных, например `films`
+- `DATABASE_PORT` - порт, по умолчанию `5432`
+- `DATABASE_HOST` - хост, по умолчанию `localhost`
 - `DATABASE_USERNAME` - имя пользователя.
 - `DATABASE_PASSWORD` - пароль пользователя.
 

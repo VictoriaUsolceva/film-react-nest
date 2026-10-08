@@ -14,14 +14,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [AppConfigModule],
       useFactory: (config: AppConfig) => {
-        const { hostname, port, pathname } = new URL(config.database.url);
         return {
           type: config.database.driver,
-          host: hostname,
-          port: parseInt(port),
+          host: config.database.host,
+          port: config.database.port,
           username: config.database.username,
           password: config.database.password,
-          database: pathname.substring(1),
+          database: config.database.dbname,
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: false,
         };
