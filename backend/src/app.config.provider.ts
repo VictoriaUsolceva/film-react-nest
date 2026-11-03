@@ -22,6 +22,7 @@ export const AppConfigProvider = {
           '/content/afisha',
         ),
         port: configService.get<number>('PORT', 3000),
+        logger: configService.get<logger>('LOGGER', 'json'),
       },
     };
   },
@@ -40,6 +41,7 @@ export interface AppConfig {
 }
 
 type Driver = 'postgres';
+type logger = 'tskv' | 'json' | 'dev';
 
 export interface AppConfigDatabase {
   driver: Driver;
@@ -53,4 +55,5 @@ export interface AppConfigDatabase {
 export interface AppConfigSettings {
   imageFolder: string;
   port: number;
+  logger: logger;
 }
