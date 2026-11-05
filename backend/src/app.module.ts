@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { configProvider } from './app.config.provider';
+import { AppConfig, AppConfigModule, CONFIG } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
-import { DatabaseModule } from './database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -11,11 +11,25 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true,
       cache: true,
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [AppConfigModule],
+      useFactory: (config: AppConfig) => {
+        return {
+          type: config.database.driver,
+          host: config.database.host,
+          port: config.database.port,
+          username: config.database.username,
+          password: config.database.password,
+          database: config.database.dbname,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: false,
+        };
+      },
+      inject: [CONFIG],
+    }),
     FilmsModule,
     OrderModule,
-    DatabaseModule,
   ],
   controllers: [],
-  providers: [configProvider],
 })
 export class AppModule {}
