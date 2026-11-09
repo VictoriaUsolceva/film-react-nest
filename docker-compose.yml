@@ -62,7 +62,7 @@ services:
     restart: always
     volumes:
       - frontend_static:/var/www/html:ro
-      - certbot_etc:/etc/letsencrypt:ro
+      - ./certbot_data:/etc/letsencrypt:ro
     networks:
       - app-network
     depends_on:
@@ -82,8 +82,7 @@ services:
 volumes:
   pgdata:          
   pgadmin_data:    
-  frontend_static: 
-  certbot_etc:
+  frontend_static:
 
 networks:
   app-network:
