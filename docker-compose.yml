@@ -1,0 +1,97 @@
+services:
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: 
+      unless-stopped
+    ports:
+      - "127.0.0.1:${DATABASE_PORT}:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "127.0.0.1:${PGADMIN_PORT}:80"
+    networks:
+      - app-network
+    restart: 
+      unless-stopped
+    depends_on:
+      - postgres-db
+
+  frontend:
+    build: ./frontend
+    image: ghcr.io/victoriausolceva/film-react-nest/frontend:latest
+    container_name: frontend_builder_container
+    volumes:
+      - frontend_static:/var/www/html
+    restart: 
+      on-failure
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    image: ghcr.io/victoriausolceva/film-react-nest/backend:latest
+    container_name: backend_container
+    env_file:
+      - .env
+    environment:
+      DATABASE_HOST: postgres-db
+      PORT: ${BACKEND_PORT}
+    networks:
+      - app-network
+    restart:
+      unless-stopped
+    depends_on:
+      - postgres-db
+
+  nginx-server:
+    build: ./nginx
+    image: ghcr.io/victoriausolceva/film-react-nest/nginx:latest
+    container_name: nginx_container
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: 
+      always
+    volumes:
+      - frontend_static:/var/www/html:ro
+      - ./certbot_data:/etc/letsencrypt:ro
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+      - backend
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_container
+    profiles:
+      - manual
+    ports:
+      - "80:80"
+    volumes:
+      - ./certbot_data:/etc/letsencrypt
+
+volumes:
+  pgdata:          
+  pgadmin_data:    
+  frontend_static:
+
+networks:
+  app-network:
+    driver: bridge

@@ -4,6 +4,7 @@ import { AppConfig, AppConfigModule, CONFIG } from './app.config.provider';
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     FilmsModule,
     OrderModule,
+    LoggerModule,
   ],
   controllers: [],
 })
